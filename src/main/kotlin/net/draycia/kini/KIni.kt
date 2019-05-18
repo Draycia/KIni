@@ -6,6 +6,7 @@ import java.lang.IllegalArgumentException
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
+import kotlin.text.Typography.section
 
 class KIni(private val file: File) {
     private val config = HashMap<String, ArrayList<Pair<String, String>>>()
@@ -117,7 +118,11 @@ class KIni(private val file: File) {
         }
     }
 
-    fun getList(section: String?, key: String, default: List<String>?): List<String> {
-        return emptyList() // TODO: Implement
+    fun getList(section: String?, key: String, default: List<String>?): List<String>? {
+        return get(section, key)?.split(",") ?: default
+    }
+
+    fun getIntList(section: String?, key: String, default: List<Int>?): List<Int>? {
+        return get(section, key)?.split(",")?.map { it.trim().toInt() } ?: default
     }
 }
