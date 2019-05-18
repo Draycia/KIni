@@ -2,20 +2,23 @@ package net.draycia.kini
 
 import java.io.File
 import java.io.FileReader
+import java.io.InputStream
+import java.io.InputStreamReader
 import java.lang.IllegalArgumentException
 import java.lang.NumberFormatException
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
-import kotlin.text.Typography.section
 
-class KIni(private val file: File) {
+class KIni(private val stream: InputStream? = null, private val file: File? = null) {
     private val config = HashMap<String, ArrayList<Pair<String, String>>>()
 
-    fun loadFile(debug: Boolean = false): Boolean {
-        if (!file.exists()) return false
-
-        val reader = FileReader(file)
+    fun loadFile(): Boolean {
+        val reader = when {
+            stream != null -> InputStreamReader(stream)
+            file != null -> FileReader(file)
+            else -> return false
+        }
 
         // Store the current section name and its key+value pairs
         var section = ""
@@ -63,13 +66,14 @@ class KIni(private val file: File) {
     private fun get(section: String?, key: String): String? {
         val sect = section ?: ""
 
-        config[sect.toLowerCase()]?.let { options ->
+        config[sect]?.let { options ->
             options.forEach { option ->
                 if (option.first == key) {
                     return option.second
                 }
             }
         }
+
         return null
     }
 
