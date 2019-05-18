@@ -3,6 +3,7 @@ package net.draycia.kini
 import java.io.File
 import java.io.FileReader
 import java.lang.IllegalArgumentException
+import java.lang.NumberFormatException
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -122,6 +123,7 @@ class KIni(private val file: File) {
         return get(section, key)?.split(",") ?: default
     }
 
+    @Throws(NumberFormatException::class)
     fun getIntList(section: String?, key: String, default: List<Int>?): List<Int>? {
         return get(section, key)?.split(",")?.map { it.trim().toInt() } ?: default
     }
