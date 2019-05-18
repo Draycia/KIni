@@ -43,17 +43,15 @@ class KIni(private val file: File) {
                 // Key/Value
                 val match = entryRegex.find(line)
 
-                System.out.println("Matches: ${match?.groupValues?.size}")
-
                 if (match != null && match.groupValues.size == 3) {
                     values.add(Pair(match.groupValues[1], match.groupValues[2]))
                 }
             }
         }
 
-        config[section] = values // Save last bit of data
+        reader.close()
 
-        if (debug) System.out.println(config)
+        config[section] = values // Save last bit of data
 
         return true
     }
@@ -88,7 +86,6 @@ class KIni(private val file: File) {
     }
 
     fun getInt(section: String?, key: String, default: Int? = null): Int? {
-        System.out.println("Section: [$section], Key: [$key], Result: [${get(section, key)}]")
         return get(section, key)?.trim()?.toIntOrNull() ?: default
     }
 
